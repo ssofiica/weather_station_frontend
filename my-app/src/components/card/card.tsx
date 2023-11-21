@@ -5,7 +5,13 @@ import './PhenomCard.css'
 import image  from './1.png'
 
 interface Props {
-    data: any[]
+    data: {
+        phenom_name: string;
+        phenom_id: number;
+        image: string;
+        unit: string;
+        description: string;
+      };
 }
 
 const PhenomCard: FC<Props> = (props) => {
@@ -22,8 +28,8 @@ const PhenomCard: FC<Props> = (props) => {
             <div className="phenom-title ps-1">
                 <Card.Title>{props.data.phenom_name}</Card.Title>
             </div>
-            <Button className="card-button me-4 align-self-center" href={"/phenomens/" + props.data.phenom_id} target="_blank" variant="primary">Подробнее</Button>
-            <button className="btn btn-outline-danger align-self-center" href={""} variant="primary">Удалить</button>
+            <Button className="card-button me-4 align-self-center" href={"phenomens/" + props.data.phenom_id} target="_blank" variant="primary">Подробнее</Button>
+            <button className="btn btn-outline-danger align-self-center">Удалить</button>
         </Card.Body>
     </Card>
     </div>

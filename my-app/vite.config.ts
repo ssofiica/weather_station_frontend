@@ -12,6 +12,7 @@ export default defineConfig({
       }
     }
   },
+  base: "weather_station_frontend",
   plugins: [react()],
 })
 
