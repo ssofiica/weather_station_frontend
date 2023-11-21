@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import image from '../components/card/1.png'
 import './detail.css'
 import Breadcrumbs, { BreadcrumbLink } from '../components/breadcrumbs/bread';
+import { phenomens } from '../mockData'
 
 const DetailsPage: FC = () => {
     const {id} = useParams()
@@ -14,7 +15,11 @@ const DetailsPage: FC = () => {
           .then((jsonData) => {setPhenom(jsonData)
             console.log(jsonData)
             console.log(phenom)})
-          .catch((error) => console.error('Error fetching data:', error));
+          .catch((error) => {
+            console.log(phenomens[parseInt(id)])
+            setPhenom(phenomens[parseInt(id)])
+            console.error('Error fetching data:', error)
+            });;
       }, []);
 
       const breadcrumbsLinks: BreadcrumbLink[] = [

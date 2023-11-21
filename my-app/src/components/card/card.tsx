@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { Button, Card } from 'react-bootstrap'
 import './PhenomCard.css'
 import image  from './1.png'
-import { phenomens } from '../../mockData';
 
 interface Props {
     data: any[]

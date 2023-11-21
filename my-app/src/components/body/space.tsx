@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import PhenomCard from "../card/card";
 import './space.css'
 import Breadcrumbs, { BreadcrumbLink } from '../breadcrumbs/bread';
+import { phenomens } from '../../mockData'
 
 const Space: FC = () => {
     const [phenoms, setPhenoms] = useState<any[]>([])
@@ -15,7 +16,11 @@ const Space: FC = () => {
           .then((jsonData) => {setPhenoms(jsonData.phenomens)
             console.log(jsonData.data)
             console.log(phenoms)})
-          .catch((error) => console.error('Error fetching data:', error));
+          .catch((error) => {
+            console.log(phenomens)
+            setPhenoms(phenomens)
+            console.error('Error fetching data:', error)
+            });
       }
     ,[]);
 
