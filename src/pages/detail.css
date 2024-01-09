@@ -1,0 +1,60 @@
+.detail-space{
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.back-btn{
+    background-color: #393838;
+    border: none;
+    border-radius: 16px; 
+    height: 30px; 
+    width: 70px;
+}
+.back-btn a{
+    display: inline-block;
+    text-decoration: none;
+    color:aliceblue;
+    margin-left: 12px;
+}
+.d-card{
+    width: 650px;
+    height: 250px;
+    background-color: #ededed;
+    border-radius: 38px;
+    display: flex;
+}
+.im{
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 30px;
+}
+.d-image{
+    width: 250px;
+    height: 192px;
+    border-radius: 40px;
+    object-fit: cover;
+    object-position: 0% 40%;
+} 
+.text{
+    flex-direction: column;
+    font-family: 'Raleway';
+    font-weight: 400;
+    font-size: 16px;
+    margin-left: 40px;
+    height: 192px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.text p{
+    font-family: 'Raleway';
+    font-weight: 400;
+    font-size: 24px;
+    display: flex;
+}
+.text h5{
+    font-family: 'Raleway';
+    font-weight: 400;
+    font-size: 16px;
+    display: flex;
+    width: 250px;
+}
