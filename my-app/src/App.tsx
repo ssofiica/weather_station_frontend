@@ -10,6 +10,7 @@ const StartPage: FC = () => {
       <BrowserRouter>
         <Navigate/>
         <Routes>
+          <Route path='weather_station_frontend/' element={<Navigate to="weather_station_frontend/phenomens"/>}/>
           <Route path='weather_station_frontend/phenomens' element={<MainPage/>}/>
           <Route path='weather_station_frontend/phenomens/:id' element={<DetailsPage/>}/>
         </Routes>
