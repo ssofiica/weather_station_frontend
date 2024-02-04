@@ -17,6 +17,7 @@ function Navigate() {
   const admin = useIsAdmin()
   const email = useEmail()
   const token = Cookies.get('session_id')
+  
 
   const logout = async () =>{
     try {
@@ -37,7 +38,7 @@ function Navigate() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Link className="link" to="/weather_station_frontend/phenomens/">Природные явления</Link>
-            { is_auth && (<Link className="link" to="/weather_station_frontend/requests/">Заявки</Link>) }
+            { is_auth && (<Link className="link" to="/weather_station_frontend/requests/">Наблюдения</Link>) }
             { admin && (<Link className="link" to="/weather_station_frontend/phenomens/edit/">Редактировать явления</Link>) }
           </Nav>
         </Navbar.Collapse>

@@ -1,11 +1,11 @@
 import axios from "axios"
 import Cookies from "js-cookie"
-import { FC, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useIsAdmin, useIsAuth } from '../../store/slices/auth_slices'
 
 import {  useSelector } from "react-redux"
 import { RootState } from "../../store/store"
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import { Navbar, Form, Button, Table, InputGroup} from 'react-bootstrap';
 import Breadcrumbs, { BreadcrumbLink } from '../../components/breadcrumbs/bread';
 import './onerequest.css';
@@ -44,6 +44,7 @@ const OneRequestPage = () => {
     const {id} = useParams()
     const admin = useIsAdmin()
     const token = Cookies.get('session_id');
+    const navigate = useNavigate()
 
     const getPhenomens = async () => {
         try {
@@ -89,8 +90,12 @@ const OneRequestPage = () => {
                 headers: {'Cookie': `session_id=${token}`},
                 status
             })
-            setSave([])
-            getPhenomens()
+            if (status==='Удален'){
+                navigate('/weather_station_frontend/phenomens/');
+            } else {
+                setSave([])
+                getPhenomens()
+            }
         } catch (error) {
             console.log("Ошибка в получении заявки", error)
         }
@@ -110,15 +115,15 @@ const OneRequestPage = () => {
     }
 
     const breadcrumbsLinks: BreadcrumbLink[] = [
-        { label: 'Заявки', url: '/requests/' },
-        { label: `Заявка №${id}` || '', url: `/requests/${id}` },
+        { label: 'Наблюдения', url: '/requests/' },
+        { label: `${req.request_data}` || '', url: `/requests/${id}` },
     ];
 
     return(
         <>
         <div className="m"><Breadcrumbs links={breadcrumbsLinks}/></div>
         <div className="request">
-            <h5 className="title">Заявка</h5>
+            <h5 className="title">Наблюдение</h5>
             <Table className='request-data'>
                 <thead>
                     <tr>
@@ -192,9 +197,9 @@ const OneRequestPage = () => {
                             }
                             </td>
                             <td>
-                                {req.status==='Черновик' && <Button onClick={deleteRecord(item.phenom_id)}>Удалить</Button>}
+                                {req.status==='Черновик' && <Button className="danger-button" onClick={deleteRecord(item.phenom_id)}>Удалить</Button>}
                                 {save.includes(item.phenom_id) &&
-                                    <Button onClick={updateRecord(item.phenom_id)}>
+                                    <Button className="dark-button" onClick={updateRecord(item.phenom_id)}>
                                         Сохранить</Button>
                                 }
                             </td>
@@ -203,15 +208,15 @@ const OneRequestPage = () => {
                 </tbody>
             </Table>
             {admin && req.status==='Сформирован' &&(
-                <>
-                <Button onClick={adminStatus('Завершен')}>Завершить</Button>
-                <Button onClick={adminStatus('Отклонен ')}>Отклонить</Button>
-                </>)}
+                <div className="btn-group">
+                <Button className="dark-button" onClick={adminStatus('Завершен')}>Завершить</Button>
+                <Button className="danger-button" onClick={adminStatus('Отклонен ')}>Отклонить</Button>
+                </div>)}
             {!admin && req.status=='Черновик' && (
-                <>
-                <Button onClick={creatorStatus('Сформирован')}>Сформировать</Button>
-                <Button onClick={creatorStatus('Удален')}>Удалить</Button>
-                </>
+                <div className="btn-group">
+                <Button className="dark-button w-100" onClick={creatorStatus('Сформирован')}>Сформировать</Button>
+                <Button className="danger-button m" onClick={creatorStatus('Удален')}>Удалить</Button>
+                </div>
                 )
             }
             

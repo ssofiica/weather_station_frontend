@@ -43,8 +43,9 @@ const RequestsPage = () => {
     const [loaded, setLoaded] = useState(false)
 
     const getData = async() => {
+        //console.log(status)
         try{
-            setLoaded(false);
+            setLoaded(true);
             const response: AxiosResponse = await axios.get(`/api/requests/`, { 
                 params: {
                     ...(status && { status: status }),
@@ -67,7 +68,6 @@ const RequestsPage = () => {
                     : null;
             });
             setRequests(response.data)
-            setLoaded(true);
             console.log(requests)
         } catch(error) {
             console.log('Ошибка при получении заявок',error);
@@ -80,7 +80,7 @@ const RequestsPage = () => {
             getData()
         }, 7000);
         return () => clearInterval(intervalId);
-    }, []);
+    }, [dispatch, status, startDate, endDate]);
 
     const handleSearch = (event: React.FormEvent<any>) => {
         event.preventDefault();
@@ -94,8 +94,19 @@ const RequestsPage = () => {
         setRequests(filteredRequests);
     };
 
+    const adminStatus = (status: string, id: number) => async() => {
+        try {
+            const resp = await axios.put(`/api/requests/${id}/moderator_change_status/`, {
+                headers: {'Cookie': `session_id=${token}`},
+                status
+            })
+        } catch (error) {
+            console.log("Ошибка в получении заявки", error)
+        }
+    }
+
     const breadcrumbsLinks: BreadcrumbLink[] = [
-        { label: 'Заявки', url: '/requests/' },
+        { label: 'Надблюдения', url: '/requests/' },
     ];
 
     return (
@@ -116,7 +127,7 @@ const RequestsPage = () => {
                         <InputGroup.Text>Статус</InputGroup.Text>
                         <Form.Select
                             defaultValue={status}
-                            onChange={(status) => dispatch(setStatus(status.target.value))}>
+                            onChange={(status) => {dispatch(setStatus(status.target.value)); console.log(status)}}>
                             <option value="">Любой</option>
                             <option value="Сформирован">Сформирован</option>
                             <option value="Завершен">Завершен</option>
@@ -162,6 +173,7 @@ const RequestsPage = () => {
                             <th className='text-center'>Дата формирования</th>
                             <th className='text-center'>Дата завершения</th>
                             <th className='text-center'>Температура</th>
+                            {admin && <th></th>}
                         </tr>
                     </thead>
                     <tbody>
@@ -175,6 +187,23 @@ const RequestsPage = () => {
                                 <td className='text-center'>{req.approve_date}</td>
                                 <td className='text-center'>{req.end_date}</td>
                                 <td className='text-center'>{req.temperature}</td>
+                                {admin && <>
+                                {(req.status==='Сформирован')? (
+                                <td className='text-center align-middle p-0'>
+                                    <Button size='sm'
+                                        className='dark-button'
+                                        onClick={adminStatus('Завершен', req.request_id)}
+                                        >
+                                        Завершить
+                                    </Button>
+                                    <Button size='sm'
+                                        className='danger-button'
+                                        onClick={adminStatus('Отклонен', req.request_id)}
+                                        >
+                                        Отклонить
+                                    </Button>
+                                </td>) : <td></td>}
+                                </>}
                             </tr>
                         ))}
                     </tbody>

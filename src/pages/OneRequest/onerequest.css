@@ -13,3 +13,34 @@
 .m{
     margin-left:130px;
 }
+.dark-button{
+    margin-top: 14px;
+    border-radius: 12px;
+    background-color: #212121;
+    color:#ffffff;
+    width: 90px;
+    padding: 3px 3px 3px 3px;
+    height: 32px;
+    display:block;
+}
+.dark-button:hover{
+    color: #464646;
+    background-color: #c4fea4;
+    border: 1px solid #242424;
+}
+.danger-button{
+    margin-top: 14px;
+    border-radius: 12px;
+    border: 1px solid #f40808;
+    background-color: #ffffff;
+    color:#f40808;
+    width: 90px;
+    padding: 3px 3px 3px 3px;
+    height: 32px;
+    display:block;
+}
+.danger-button:hover{
+    color: #ffffff;
+    background-color: #f40808;
+    border: 1px solid #f40808;
+}

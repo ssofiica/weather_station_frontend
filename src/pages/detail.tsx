@@ -8,7 +8,7 @@ import { phenomens } from '../mockData'
 interface Phenom {
   phenom_name: string;
   phenom_id: number;
-  image: string;
+  image: string | null;
   unit: string;
   description: string;
 }
@@ -16,7 +16,7 @@ interface Phenom {
 
 const DetailsPage: FC = () => {
     const {id} = useParams()
-    const [phenom, setPhenom] = useState<Phenom>({phenom_name: '', phenom_id: 0, image: '', unit: '', description: ''});
+    const [phenom, setPhenom] = useState<Phenom>({phenom_name: '', phenom_id: 0, image: null , unit: '', description: ''});
     useEffect(() => {
         fetch(`/api/phenomens/${id}/`)
           .then((response) => response.json())
@@ -46,7 +46,11 @@ const DetailsPage: FC = () => {
             <a href="/weather_station_frontend/phenomens">Назад</a>
         </div>
         <div className="d-card">
-            <div className="im"><img className="d-image" src={image} alt=""/></div>
+            <div className="im">
+            { phenom.image ?<img className="d-image" src={phenom.image} alt=""/> 
+            :<img className="d-image" src={image} alt=""/>
+            }
+            </div>
             <span className="text">
                 <p>{phenom.phenom_name}</p>
                 <h5>{phenom.description }</h5>

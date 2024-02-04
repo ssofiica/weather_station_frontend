@@ -1,10 +1,11 @@
-import { FC, useEffect, useState, ChangeEvent, useRef } from 'react';
+import React, { useEffect, useState, ChangeEvent, useRef } from 'react';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import axios, { AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
 import { useDispatch } from "react-redux";
 import { Card, Row, Navbar, FloatingLabel, InputGroup, Form, Button } from 'react-bootstrap';
 import image  from '../../components/body/1.png'
+
 import Breadcrumbs, { BreadcrumbLink } from '../../components/breadcrumbs/bread';
 
 import './style.css'
@@ -24,9 +25,10 @@ const PhenomenEdit = () => {
     let { id } = useParams()
     const [phenomen, setPhenomen] = useState<Phenomen>({phenom_id: 0, image: '', phenom_name: '', status: 'Действует', unit: '', description: ''})
     const [loaded, setLoaded] = useState<Boolean>(false)
-    const dispatch = useDispatch();
+    const [uploadimage, setUploadimage] = useState<File | null>(null);
+    const dispatch = useDispatch()
     const navigate = useNavigate()
-    const [edit, setEdit] = useState<boolean>(false)
+    const [edit, setEdit] = useState<boolean>(true)
     const token = Cookies.get('session_id');
 
 
@@ -67,23 +69,34 @@ const PhenomenEdit = () => {
         setPhenomen(phenomen => ({ ...phenomen, [e.target.id]: e.target.value }))
     }
 
-    const deletePhenom = async() => {
-        const resp = await axios.delete(`/api/phenomens/${id}/`, {headers: {'Cookie': `session_id=${token}`}})
-        console.log(resp.data)
-        navigate('/weather_station_frontend/phenomens/edit/');
+    const image = (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log("начинаем картинку менять")
+        if (event.target.files && event.target.files.length > 0) {
+            setUploadimage(event.target.files[0]);
+            console.log("картинку установили")
+        }
     }
 
     const save = async () => {
         setEdit(false);
-        if (id == '0') {
-            const resp = await axios.post(`/api/phenomens/`, phenomen, { headers: { 'Cookie': `session_id=${token}`, } })
+        if (uploadimage){
+            console.log("картинку сейчас отправим")
+            const formData = new FormData();
+            formData.append('file', uploadimage);
+            const resp = await axios.post(`/api/phenomens/add_image/${id}/`, formData)
             console.log(resp.data)
-            setPhenomen(resp.data)
-        } else {
-            const resp = await axios.put(`/api/phenomens/${phenomen.phenom_id}/`, phenomen, { headers: { 'Cookie': `session_id=${token}`, } })
-            console.log(resp.data)
-            setPhenomen(resp.data)
+            navigate('/weather_station_frontend/phenomens/');
         }
+        else {console.log(`проблемы с загрузкой фотки ${uploadimage}`)}
+        // if (id == '0') {
+        //     const resp = await axios.post(`/api/phenomens/`, phenomen, { headers: { 'Cookie': `session_id=${token}`, } })
+        //     console.log(resp.data)
+        //     setPhenomen(resp.data)
+        // } else {
+        //     const resp = await axios.put(`/api/phenomens/${phenomen.phenom_id}/`, phenomen, { headers: { 'Cookie': `session_id=${token}`, } })
+        //     console.log(resp.data)
+        //     setPhenomen(resp.data)
+        // }
     }
 
     const get = async () =>{
@@ -129,17 +142,17 @@ const PhenomenEdit = () => {
                                             <InputGroup.Text className='c-input-group-text'>Единицы измерения</InputGroup.Text>
                                             <Form.Control id='unit' required value={phenomen.unit} readOnly={!edit} onChange={changeString} />
                                         </InputGroup>
+                                        <Form.Group controlId="formFile" className="mb-3">
+                                            <Form.Label>Выберите картинку</Form.Label>
+                                            <Form.Control type="file" onChange={image}/>
+                                        </Form.Group>
                                     </Card.Body>
-                                    {edit ? (
+                                    {edit && (
                                         <div className="btn-group">
                                         <Button className="dark-button" variant='primary' type='button' onClick={save}>Сохранить</Button>
                                         {id != '0' && <Button className="danger-button" onClick={cancel}>Отменить</Button>}
                                         </div>
-                                        ) : ( <div className="btn-group">
-                                        <Button type='button' className="dark-button" onClick={() => setEdit(true)}>Изменить</Button>
-                                        <Button type='button' className="danger-button" onClick={deletePhenom}>Удалить</Button>
-                                        </div>
-                                    )}
+                                        )}
                                 </Form>
                         
                         </Row>

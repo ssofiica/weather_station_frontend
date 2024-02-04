@@ -124,17 +124,15 @@ const PhenomenTable = () => {
                                             <tr>
                                                 <td className='py-1 border-0'>
                                                     <Link to={`/weather_station_frontend/phenomens/edit/${phenom.phenom_id}`}
-                                                        className='btn btn-sm btn-outline-secondary text-decoration-none w-100' >
+                                                        className='dark-button text-decoration-none w-100' >
                                                         Редактировать
                                                     </Link>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td className='py-1 border-0'>
+                                                <td>
                                                     <Button
-                                                        variant='outline-danger'
-                                                        size='sm'
-                                                        className='w-100'
+                                                        className="danger-button mt-0"
                                                         onClick={deletePhenom(phenom.phenom_id)}>
                                                         Удалить
                                                     </Button>
